@@ -2,16 +2,7 @@ import time, sys, re
 import json
 import unittest
 import subprocess
-
-import importlib
-try:
-    importlib.import_module('stomp')
-except ImportError:
-    import pip
-    pip.main(['install', 'stomp.py'])
-finally:
-    globals()['stomp'] = importlib.import_module('stomp')
-
+import stomp
 
 class DoNothingListener(stomp.ConnectionListener):
     def on_error(self, headers, message):
@@ -54,9 +45,9 @@ class TestAuditPlugin(unittest.TestCase):
     def setUp(self):
 
         #call(['/var/lib/irods/scripts/irods/test/test_irods_rule_engine_plugin_audit_amqp_setup.sh'])
-        subprocess.call(['wget', 'http://archive.apache.org/dist/activemq/5.13.2/apache-activemq-5.13.2-bin.tar.gz'])
-        subprocess.call(['tar', 'xvfz', 'apache-activemq-5.13.2-bin.tar.gz'])
-        subprocess.call(['apache-activemq-5.13.2/bin/activemq', 'start'])  #TODO run in backgroun
+        #subprocess.call(['wget', 'http://archive.apache.org/dist/activemq/5.13.2/apache-activemq-5.13.2-bin.tar.gz'])
+        #subprocess.call(['tar', 'xvfz', 'apache-activemq-5.13.2-bin.tar.gz'])
+        #subprocess.call(['apache-activemq-5.13.2/bin/activemq', 'start'])  #TODO run in backgroun
         subprocess.Popen(['cp', '/var/lib/irods/scripts/irods/test/test_plugin_audit_amqp_server_config.json', '/etc/irods/server_config.json'])
         time.sleep(3);
 
