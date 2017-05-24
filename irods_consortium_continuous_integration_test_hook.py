@@ -1,0 +1,37 @@
+from __future__ import print_function
+
+import optparse
+import os
+import shutil
+
+import irods_python_ci_utilities
+
+
+def main():
+    parser = optparse.OptionParser()
+    parser.add_option('--output_root_directory')
+    parser.add_option('--built_packages_root_directory')
+    options, _ = parser.parse_args()
+
+    output_root_directory = options.output_root_directory
+    built_packages_root_directory = options.built_packages_root_directory
+
+    irods_python_ci_utilities.install_os_packages_from_files(
+        irods_python_ci_utilities.append_os_specific_directory(built_packages_root_directory))
+
+    irods_python_ci_utilities.subprocess_get_output(['sudo', '-EH', 'pip', 'install', 'stomp.py==4.1.17'])
+    irods_python_ci_utilities.subprocess_get_output(['sudo', '-EH', 'pip', 'install', 'unittest-xml-reporting==1.14.0'])
+    irods_python_ci_utilities.subprocess_get_output(['wget', 'http://archive.apache.org/dist/activemq/5.13.2/apache-activemq-5.13.2-bin.tar.gz'])
+    irods_python_ci_utilities.subprocess_get_output(['tar', 'xvfz', 'apache-activemq-5.13.2-bin.tar.gz'])
+    irods_python_ci_utilities.subprocess_get_output(['apache-activemq-5.13.2/bin/activemq', 'start'])
+
+    try:
+        test_output_file = 'log/test_output.log'
+        irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'python2 scripts/run_tests.py --run_s=test_plugin_audit_amqp 2>&1 | tee {0}; exit $PIPESTATUS'.format(test_output_file)], check_rc=True)
+    finally:
+        if output_root_directory:
+            shutil.copy('/var/lib/irods/log/test_output.log', output_root_directory)
+
+
+if __name__ == '__main__':
+    main()
