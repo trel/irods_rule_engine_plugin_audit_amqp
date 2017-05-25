@@ -16,11 +16,10 @@ def main():
 
     output_root_directory = options.output_root_directory
     built_packages_root_directory = options.built_packages_root_directory
-
     package_suffix = irods_python_ci_utilities.get_package_suffix()
-    irods_python_ci_utilities.install_os_packages_from_files(glob.glob(os.path.join(
-        'irods-rule-engine-plugin-audit-amqp*.{0}'.format(package_suffix),
-        irods_python_ci_utilities.append_os_specific_directory(built_packages_root_directory))))
+    os_specific_directory = irods_python_ci_utilities.append_os_specific_directory(built_packages_root_directory)
+
+    irods_python_ci_utilities.install_os_packages_from_files(glob.glob(os.path.join(os_specific_directory, 'irods-rule-engine-plugin-audit-amqp*.{0}'.format(package_suffix))))
 
     irods_python_ci_utilities.subprocess_get_output(['sudo', '-EH', 'pip', 'install', 'stomp.py==4.1.17'])
     irods_python_ci_utilities.subprocess_get_output(['sudo', '-EH', 'pip', 'install', 'unittest-xml-reporting==1.14.0'])
