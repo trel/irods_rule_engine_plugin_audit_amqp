@@ -32,9 +32,9 @@ def main():
         irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'python2 scripts/run_tests.py --run_s=test_plugin_audit_amqp 2>&1 | tee {0}; exit $PIPESTATUS'.format(test_output_file)], check_rc=True)
     finally:
         if output_root_directory:
-            shutil.copy('var/lib/irods/test-reports', output_root_directory)
+            irods_python_ci_utilities.gather_files_satisfying_predicate('/var/lib/irods/log', output_root_directory, lambda x: True)
             shutil.copy('/var/lib/irods/log/test_output.log', output_root_directory)
-            shutil.copytree('/var/lib/irods/log', os.path.join(output_root_directory, 'log'))
+            shutil.copytree('/var/lib/irods/test-reports', os.path.join(output_root_directory, 'test-reports'))
 
 
 if __name__ == '__main__':
