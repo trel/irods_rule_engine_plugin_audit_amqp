@@ -88,6 +88,7 @@ class TestAuditPlugin(unittest.TestCase):
         self.assertEqual(listener.rule_summation['audit_pep_resource_write_post'] / write_pep_count, 1048576)
 
     def test_get(self):
+        subprocess.call(['iput', '-f', 'testfile.dat'])
         self.purge_queue()
         listener = TestListener()
         conn = stomp.Connection()

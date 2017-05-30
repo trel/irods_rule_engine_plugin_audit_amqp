@@ -4,6 +4,7 @@ import optparse
 import os
 import shutil
 import glob
+import time
 
 import irods_python_ci_utilities
 
@@ -26,6 +27,8 @@ def main():
     irods_python_ci_utilities.subprocess_get_output(['wget', 'http://archive.apache.org/dist/activemq/5.13.2/apache-activemq-5.13.2-bin.tar.gz'])
     irods_python_ci_utilities.subprocess_get_output(['tar', 'xvfz', 'apache-activemq-5.13.2-bin.tar.gz'])
     irods_python_ci_utilities.subprocess_get_output(['apache-activemq-5.13.2/bin/activemq', 'start'])
+
+    time.sleep(10)
 
     try:
         test_output_file = 'log/test_output.log'
