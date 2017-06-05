@@ -25,6 +25,7 @@ def main():
     irods_python_ci_utilities.subprocess_get_output(['sudo', '-EH', 'pip', 'install', 'stomp.py==4.1.17'])
     irods_python_ci_utilities.subprocess_get_output(['sudo', '-EH', 'pip', 'install', 'unittest-xml-reporting==1.14.0'])
     irods_python_ci_utilities.subprocess_get_output(['sudo', 'apt-get', 'install', '-y', 'default-jre'])
+    irods_python_ci_utilities.subprocess_get_output(['suod', 'apt-get', 'install', '-y', 'irods-externals-qpid-with-proton0.34-0'])
     irods_python_ci_utilities.subprocess_get_output(['wget', 'http://archive.apache.org/dist/activemq/5.13.2/apache-activemq-5.13.2-bin.tar.gz'])
     irods_python_ci_utilities.subprocess_get_output(['tar', 'xvfz', 'apache-activemq-5.13.2-bin.tar.gz'])
     irods_python_ci_utilities.subprocess_get_output(['apache-activemq-5.13.2/bin/activemq', 'start'])
