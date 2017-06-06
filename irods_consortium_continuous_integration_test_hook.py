@@ -14,7 +14,11 @@ def get_build_prerequisites_all():
 
 
 def get_build_prerequisites_apt():
-    return['default-jre']+get_build_prerequisites_all()
+    if irods_python_ci_utilities.get_distribution_version_major() == '12':
+        return['openjdk-7-jre']+get_build_prerequisites_all()
+
+    else:
+        return['default-jre']+get_build_prerequisites_all()
 
 
 def get_build_prerequisites_yum():
@@ -46,6 +50,7 @@ def install_build_prerequisites():
         if irods_python_ci_utilities.get_distribution_version_major() == '12':
             irods_python_ci_utilities.install_os_packages(['python-software-properties'])
             irods_python_ci_utilities.subprocess_get_output(['sudo', 'add-apt-repository', '-y', 'ppa:ubuntu-toolchain-r/test'], check_rc=True)
+            irods_python_ci_utilities.subprocess_get_output(['sudo', 'update-java-alternatives', '--set', 'java-1.7.0-openjdk-amd64'])
             irods_python_ci_utilities.install_os_packages(['libstdc++6'])
 
     irods_python_ci_utilities.install_os_packages(get_build_prerequisites())
@@ -70,7 +75,7 @@ def main():
     install_build_prerequisites()
 
     time.sleep(10)
-    
+
     try:
         test_output_file = 'log/test_output.log'
         irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'python2 scripts/run_tests.py --xml_output --run_s=test_plugin_audit_amqp 2>&1 | tee {0}; exit $PIPESTATUS'.format(test_output_file)], check_rc=True)
